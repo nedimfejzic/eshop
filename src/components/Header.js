@@ -7,7 +7,7 @@ const Header = () => {
         <header className="lg:px-16 px-6 bg-white flex flex-wrap items-center lg:py-0 py-2">
           <div className="flex-1 flex justify-between items-center">
             <div>
-              <img className="w-10 h-10" src="/watermelon_1f349.png" />
+              <img className="w-10 h-10" src="/watermelon_1f349.png" alt='App logo' />
             </div>
           </div>
 
@@ -48,6 +48,16 @@ const Header = () => {
                     Registration
                   </Link>
                 </li>
+
+                <li>
+                  <Link to='/login'
+                    className="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-red-400 lg:mb-0 mb-2"
+                  >
+                    Login
+                  </Link>
+                </li>
+
+
               </ul>
             </nav>
           </div>
