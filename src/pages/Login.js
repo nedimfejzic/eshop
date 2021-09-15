@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { useRef } from "react";
 import { signInWithGoogle } from '../firebase/utils'
 
-class Login extends Component {
-    identifierInputRef = useRef();
-    passwordInputRef = useRef();
+const Login =()=> {
+    const identifierInputRef = useRef();
+    const passwordInputRef = useRef();
 
-    submitHandler = (e) => {
+    const submitHandler = (e) => {
         e.preventDefault();
 
         const enteredIdentifier = identifierInputRef.current.value;
@@ -17,13 +17,13 @@ class Login extends Component {
 
     }
 
-    submitGoogleAuth = (e) => {
+    const submitGoogleAuth = (e) => {
         e.preventDefault();
         console.log('login with google');
         signInWithGoogle();
     }
 
-    render() {
+    return(
         <form onSubmit={submitHandler}>
 
             <section className="text-gray-600 body-font">
@@ -53,11 +53,7 @@ class Login extends Component {
             </section>
 
         </form>
-    }
-
-
-
-
-}
+    )
+};
 
 export default Login;

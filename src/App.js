@@ -1,12 +1,14 @@
 
+import { Component } from "react";
 import { Switch, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import HomePage from "./pages/Homepage";
 import Login from "./pages/Login";
 import Registration from "./pages/Registration";
 
-function App() {
-  return (
+class App extends Component {
+  render(){
+    return (
     <div className="">
 
 
@@ -33,6 +35,7 @@ function App() {
       </Switch>
     </div>
   );
+  }
 }
 
 export default App;
