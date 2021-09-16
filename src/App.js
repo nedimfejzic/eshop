@@ -5,10 +5,16 @@ import MainLayout from "./layouts/MainLayout";
 import HomePage from "./pages/Homepage";
 import Login from "./pages/Login";
 import Registration from "./pages/Registration";
+import fire from "./firebase/utils";
 
-class App extends Component {
-  render(){
-    return (
+const App = () => {
+
+  const handleLogout = () => {
+    console.log('LOGOUT');
+
+  }
+
+  return (
     <div className="">
 
 
@@ -35,7 +41,6 @@ class App extends Component {
       </Switch>
     </div>
   );
-  }
 }
 
 export default App;

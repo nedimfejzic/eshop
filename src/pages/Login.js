@@ -1,8 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { useRef } from "react";
 import { signInWithGoogle } from '../firebase/utils'
+import fire from '../firebase/utils';
 
-const Login =()=> {
+
+const Login = () => {
+
+    const [user, setUser] = useState('');
     const identifierInputRef = useRef();
     const passwordInputRef = useRef();
 
@@ -15,15 +19,87 @@ const Login =()=> {
         console.log('form fired');
         console.log(enteredIdentifier + ' - ' + enteredPass);
 
+        fire.
+            auth()
+            .signInWithEmailAndPassword(enteredIdentifier, enteredPass)
+            .catch(err => {
+                switch (err.code) {
+                    case 'auth/invalid-email':
+                    case 'auth/user-disabled':
+                    case 'auth/user-not-found':
+                        alert(err.message);
+                        break;
+                    case 'auth/wrong-password':
+                        alert('password' + err.message);
+                        break;
+
+                }
+            });
+
+        clearInputs();
+
+
     }
+
+    const clearInputs = () => {
+        identifierInputRef.current.value = '';
+        passwordInputRef.current.value = '';
+    }
+
+    const signUpHandler = (e) => {
+        e.preventDefault();
+
+        const enteredIdentifier = identifierInputRef.current.value;
+        const enteredPass = passwordInputRef.current.value;
+
+        console.log('form fired');
+        console.log(enteredIdentifier + ' - ' + enteredPass);
+
+        fire.
+            auth()
+            .createUserWithEmailAndPassword(enteredIdentifier, enteredPass)
+            .catch(err => {
+                switch (err.code) {
+                    case 'auth/email-already-in-use':
+                    case 'auth/invalid-email':
+                        alert(err.message);
+                        break;
+                    case 'auth/weak-password':
+                        alert('password' + err.message);
+                        break;
+
+                }
+            })
+
+    }
+
+
+    const authListener = () => {
+        fire.auth().onAuthStateChanged(user => {
+            if (user) {
+                setUser(user);
+                console.log('prijavljen user');
+                console.log(user);
+            } else {
+                setUser('');
+            }
+        })
+    }
+
+    useEffect(() => { authListener(); }, [])
+
 
     const submitGoogleAuth = (e) => {
         e.preventDefault();
-        console.log('login with google');
-        signInWithGoogle();
+        //signInWithGoogle();
+        const enteredIdentifier = identifierInputRef.current.value;
+        const enteredPass = passwordInputRef.current.value;
+
+        console.log('form fired googleeeeee');
+        console.log(enteredIdentifier + ' - ' + enteredPass);
     }
 
-    return(
+    return (
         <form onSubmit={submitHandler}>
 
             <section className="text-gray-600 body-font">
@@ -37,16 +113,16 @@ const Login =()=> {
 
                         <div className="relative mb-4">
                             <label htmlFor="identifier" className="leading-7 text-sm text-gray-600">Identifier</label>
-                            <input disabled ref={identifierInputRef} required type="identifier" id="identifier" name="identifier" className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
+                            <input ref={identifierInputRef} required type="identifier" id="identifier" name="identifier" className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
                         </div>
 
 
                         <div className="relative mb-4">
                             <label htmlFor="password" className="leading-7 text-sm text-gray-600">Password</label>
-                            <input disabled ref={passwordInputRef} required type="password" minLength='5' id="password" className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
+                            <input ref={passwordInputRef} required type="password" minLength='5' id="password" className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
                         </div>
 
-                        <button disabled className="text-gray-600 bg-gray-300 border-0 py-2 px-8 focus:outline-none hover:bg-gray-300 rounded text-lg">Login</button>
+                        <button className="text-gray-600 bg-gray-300 border-0 py-2 px-8 focus:outline-none hover:bg-gray-300 rounded text-lg">Login</button>
                         <button onClick={submitGoogleAuth} className="text-white bg-red-500 border-0 py-2 px-8 focus:outline-none hover:bg-red-600 rounded text-lg mt-2">Login with Google</button>
                     </div>
                 </div>
