@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useRef } from "react";
 import { AuthContext } from '../contexts/AuthContext';
-import fire from '../firebase/utils';
+import fire, { signInWithGoogle } from '../firebase/utils';
 
 const Login = () => {
 
@@ -81,11 +81,7 @@ const Login = () => {
 
     const submitGoogleAuth = (e) => {
         e.preventDefault();
-        //signInWithGoogle();
-        const enteredIdentifier = identifierInputRef.current.value;
-        const enteredPass = passwordInputRef.current.value;
-
-        console.log('form fired googleeeeee');
+        signInWithGoogle();
     }
 
     return (
@@ -115,10 +111,12 @@ const Login = () => {
 
                         <button
                             disabled={authCtx.isLoggedIn}
-                            className={"text-gray-600 bg-gray-300 border-0 py-2 px-8 focus:outline-none hover:bg-gray-300 rounded text-lg" + (authCtx.isLoggedIn ? 'opacity-50 cursor-not-allowed' : '')}>
+                            className={"text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded  " + (authCtx.isLoggedIn ? 'opacity-50 cursor-not-allowed' : '')}>
                             {authCtx.isLoggedIn ? 'Already logged in' : 'Login'}
                         </button>
-                        <button onClick={submitGoogleAuth} className="text-white bg-red-500 border-0 py-2 px-8 focus:outline-none hover:bg-red-600 rounded text-lg mt-2">
+                        <button onClick={submitGoogleAuth}
+                            disabled={authCtx.isLoggedIn}
+                            className={"text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded  mt-2 " + (authCtx.isLoggedIn ? 'opacity-50 cursor-not-allowed' : '')}>
                             Login with Google</button>
                     </div>
                 </div>
