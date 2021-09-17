@@ -73,6 +73,7 @@ const Login = () => {
                     case 'auth/weak-password':
                         alert('password' + err.message);
                         break;
+
                 }
             })
 
@@ -81,7 +82,17 @@ const Login = () => {
 
     const submitGoogleAuth = (e) => {
         e.preventDefault();
-        signInWithGoogle();
+        signInWithGoogle()
+            .catch(err => {
+                switch (err.code) {
+                    case 'auth/popup-closed-by-user':
+                        setPasswordError(err.message);
+                        break;
+                    default:
+                        setPasswordError('Error with oAuth. Please try again...');
+                }
+            }
+            );
     }
 
     return (
