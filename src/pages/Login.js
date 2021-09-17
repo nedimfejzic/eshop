@@ -1,14 +1,25 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useRef } from "react";
-import { signInWithGoogle } from '../firebase/utils'
+import { AuthContext } from '../contexts/AuthContext';
 import fire from '../firebase/utils';
-
 
 const Login = () => {
 
     const [user, setUser] = useState('');
+    const [identifierError, setIdentifierError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
     const identifierInputRef = useRef();
     const passwordInputRef = useRef();
+
+    const authCtx = useContext(AuthContext);
+    const resetErrors = () => {
+        setIdentifierError('');
+        setPasswordError('');
+    }
+    const clearInputs = () => {
+        identifierInputRef.current.value = '';
+        passwordInputRef.current.value = '';
+    }
 
     const submitHandler = (e) => {
         e.preventDefault();
@@ -16,8 +27,8 @@ const Login = () => {
         const enteredIdentifier = identifierInputRef.current.value;
         const enteredPass = passwordInputRef.current.value;
 
-        console.log('form fired');
-        console.log(enteredIdentifier + ' - ' + enteredPass);
+        resetErrors();
+        //authCtx.login(enteredIdentifier, enteredPass);
 
         fire.
             auth()
@@ -27,24 +38,21 @@ const Login = () => {
                     case 'auth/invalid-email':
                     case 'auth/user-disabled':
                     case 'auth/user-not-found':
-                        alert(err.message);
+                        setIdentifierError(err.message);
                         break;
                     case 'auth/wrong-password':
-                        alert('password' + err.message);
+                        setPasswordError(err.message);
                         break;
+                    default:
+                        setPasswordError('Error. Please try again...');
 
                 }
+                return;
             });
 
         clearInputs();
-
-
     }
 
-    const clearInputs = () => {
-        identifierInputRef.current.value = '';
-        passwordInputRef.current.value = '';
-    }
 
     const signUpHandler = (e) => {
         e.preventDefault();
@@ -52,8 +60,6 @@ const Login = () => {
         const enteredIdentifier = identifierInputRef.current.value;
         const enteredPass = passwordInputRef.current.value;
 
-        console.log('form fired');
-        console.log(enteredIdentifier + ' - ' + enteredPass);
 
         fire.
             auth()
@@ -67,26 +73,10 @@ const Login = () => {
                     case 'auth/weak-password':
                         alert('password' + err.message);
                         break;
-
                 }
             })
 
     }
-
-
-    const authListener = () => {
-        fire.auth().onAuthStateChanged(user => {
-            if (user) {
-                setUser(user);
-                console.log('prijavljen user');
-                console.log(user);
-            } else {
-                setUser('');
-            }
-        })
-    }
-
-    useEffect(() => { authListener(); }, [])
 
 
     const submitGoogleAuth = (e) => {
@@ -96,7 +86,6 @@ const Login = () => {
         const enteredPass = passwordInputRef.current.value;
 
         console.log('form fired googleeeeee');
-        console.log(enteredIdentifier + ' - ' + enteredPass);
     }
 
     return (
@@ -114,16 +103,23 @@ const Login = () => {
                         <div className="relative mb-4">
                             <label htmlFor="identifier" className="leading-7 text-sm text-gray-600">Identifier</label>
                             <input ref={identifierInputRef} required type="identifier" id="identifier" name="identifier" className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
+                            {identifierError && <div className='bg-red-300 text-red-700 rounded-3xl px-4 py-2 mt-2'>{identifierError}</div>}
                         </div>
 
 
                         <div className="relative mb-4">
                             <label htmlFor="password" className="leading-7 text-sm text-gray-600">Password</label>
                             <input ref={passwordInputRef} required type="password" minLength='5' id="password" className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
+                            {passwordError && <div className='bg-red-300 text-red-700 rounded-3xl px-4 py-2 mt-2'>{passwordError}</div>}
                         </div>
 
-                        <button className="text-gray-600 bg-gray-300 border-0 py-2 px-8 focus:outline-none hover:bg-gray-300 rounded text-lg">Login</button>
-                        <button onClick={submitGoogleAuth} className="text-white bg-red-500 border-0 py-2 px-8 focus:outline-none hover:bg-red-600 rounded text-lg mt-2">Login with Google</button>
+                        <button
+                            disabled={authCtx.isLoggedIn}
+                            className={"text-gray-600 bg-gray-300 border-0 py-2 px-8 focus:outline-none hover:bg-gray-300 rounded text-lg" + (authCtx.isLoggedIn ? 'opacity-50 cursor-not-allowed' : '')}>
+                            {authCtx.isLoggedIn ? 'Already logged in' : 'Login'}
+                        </button>
+                        <button onClick={submitGoogleAuth} className="text-white bg-red-500 border-0 py-2 px-8 focus:outline-none hover:bg-red-600 rounded text-lg mt-2">
+                            Login with Google</button>
                     </div>
                 </div>
             </section>

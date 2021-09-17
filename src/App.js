@@ -11,7 +11,7 @@ const App = () => {
 
   const handleLogout = () => {
     console.log('LOGOUT');
-
+    fire.auth().signOut();
   }
 
   return (

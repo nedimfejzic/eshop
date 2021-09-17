@@ -1,6 +1,11 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
+import { auth } from "../firebase/utils";
+
 
 const Header = () => {
+  const authCtx = useContext(AuthContext);
   return (
     <header>
       <div className="container mx-auto">
@@ -52,8 +57,9 @@ const Header = () => {
                 <li>
                   <Link to='/login'
                     className="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-red-400 lg:mb-0 mb-2"
+                    onClick={authCtx.logout}
                   >
-                    Login
+                    {authCtx.isLoggedIn ? authCtx.userEmail : 'Login'}
                   </Link>
                 </li>
 

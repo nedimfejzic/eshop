@@ -1,13 +1,13 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+//import { useAuth } from "../contexts/AuthContext";
 
 const Registration = () => {
   const nameInputRef = useRef();
   const surnameInputRef = useRef();
   const identifierInputRef = useRef();
   const passwordInputRef = useRef();
-  const signup = { useAuth };
+  // const signup = { useAuth };
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -25,7 +25,7 @@ const Registration = () => {
     const enteredSurname = surnameInputRef.current.value;
     const enteredIdentifier = identifierInputRef.current.value;
     const enteredPass = passwordInputRef.current.value;
- 
+
 
     if ((enteredPass === "nedim123")) {
       return setError('Password cant be "nedim123"');
@@ -33,9 +33,9 @@ const Registration = () => {
 
 
     try {
-       setError('');
+      setError('');
       setIsLoading(true);
-      await signup(enteredIdentifier, enteredPass);
+      //await signup(enteredIdentifier, enteredPass);
     } catch {
       setError("Failed to create an account!");
     }
@@ -59,7 +59,7 @@ const Registration = () => {
               <div className="py-4 px-8 text-black text-xl border-b border-grey-lighter">
                 Register for a free account
               </div>
-        {error&&  <div className='my-4 mx-4 rounded-2xl bg-red-300 text-red-800 py-3 px-8 text-sm font-bold'>{error}</div>}
+              {error && <div className='my-4 mx-4 rounded-2xl bg-red-300 text-red-800 py-3 px-8 text-sm font-bold'>{error}</div>}
 
               <div className="py-4 px-8">
                 <div className="flex mb-4">
