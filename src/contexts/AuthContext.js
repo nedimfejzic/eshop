@@ -6,7 +6,8 @@ export const AuthContext = React.createContext({
     isLoggedIn: false,
     userEmail: '',
     login: (email, password) => { },
-    logout: () => { }
+    logout: () => { },
+    resetPassword : (email) =>{}
 });
 
 
@@ -17,6 +18,10 @@ export const AuthContextProvider = (props) => {
 
     const logoutHandler = () => {
         auth.signOut();
+    };
+
+    function resetPasswordHandler(email){
+       return auth.sendPasswordResetEmail(email);
     };
 
     const loginHandler = (email, password) => {
@@ -33,6 +38,7 @@ export const AuthContextProvider = (props) => {
                 setCurrentUser(user);
                 setCurrentUserIdentifier(user.email);
                 setUserIsLoggedIn(true);
+              
             }
             else {
                 console.log('authListener-context: ODJAVA');
@@ -51,30 +57,11 @@ export const AuthContextProvider = (props) => {
         userEmail: currentUserIdentifier,
         isLoggedIn: userIsLoggedIn,
         login: loginHandler,
-        logout: logoutHandler
+        logout: logoutHandler,
+        resetPassword: resetPasswordHandler
     }
 
     return <AuthContext.Provider value={contextValue}>{props.children}</AuthContext.Provider>
 
 }
 
-
-
-
-
-
-/*
-export function AuthProvider({ children }) {
-
-    const [currentUser, setCurrentUser] = useState();
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-    function signup(email, password, name, surname) {
-        return auth.createUserWithEmailAndPassword(email, password);
-    }
-
-    function loginUser(email, password) {
-        console.log('4545645646456456456464654');
-        return auth.signInWithEmailAndPassword(email, password);
-    }
-*/

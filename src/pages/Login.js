@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useRef } from "react";
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { AuthContext } from '../contexts/AuthContext';
 import fire, { signInWithGoogle } from '../firebase/utils';
 
@@ -21,63 +23,55 @@ const Login = () => {
         passwordInputRef.current.value = '';
     }
 
-    const submitHandler = (e) => {
+    const submitHandler = async(e) => {
         e.preventDefault();
 
         const enteredIdentifier = identifierInputRef.current.value;
         const enteredPass = passwordInputRef.current.value;
 
         resetErrors();
-        //authCtx.login(enteredIdentifier, enteredPass);
-
-        fire.
-            auth()
-            .signInWithEmailAndPassword(enteredIdentifier, enteredPass)
-            .catch(err => {
-                switch (err.code) {
-                    case 'auth/invalid-email':
-                    case 'auth/user-disabled':
-                    case 'auth/user-not-found':
-                        setIdentifierError(err.message);
-                        break;
-                    case 'auth/wrong-password':
-                        setPasswordError(err.message);
-                        break;
-                    default:
-                        setPasswordError('Error. Please try again...');
-
-                }
-                return;
-            });
-
+        try{
+            await authCtx.login(enteredIdentifier, enteredPass);
         clearInputs();
+        toast.success('Loged in', {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
+            identifierInputRef.current.value= '';
+
+        }catch(err){
+            switch (err.code) {
+                case 'auth/invalid-email':
+                case 'auth/user-disabled':
+                case 'auth/user-not-found':
+                    setIdentifierError(err.message);
+                    break;
+                case 'auth/wrong-password':
+                    setPasswordError(err.message);
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        });
+                    break;
+                default:
+                    setPasswordError('Error. Please try again...');
+
+        }
     }
 
-
-    const signUpHandler = (e) => {
-        e.preventDefault();
-
-        const enteredIdentifier = identifierInputRef.current.value;
-        const enteredPass = passwordInputRef.current.value;
-
-
-        fire.
-            auth()
-            .createUserWithEmailAndPassword(enteredIdentifier, enteredPass)
-            .catch(err => {
-                switch (err.code) {
-                    case 'auth/email-already-in-use':
-                    case 'auth/invalid-email':
-                        alert(err.message);
-                        break;
-                    case 'auth/weak-password':
-                        alert('password' + err.message);
-                        break;
-
-                }
-            })
-
+       
     }
+
 
 
     const submitGoogleAuth = (e) => {
@@ -129,7 +123,11 @@ const Login = () => {
                             disabled={authCtx.isLoggedIn}
                             className={"text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded  mt-2 " + (authCtx.isLoggedIn ? 'opacity-50 cursor-not-allowed' : '')}>
                             Login with Google</button>
+                   
+                    <Link to='/reset-password' className="leading-relaxed mt-4 text-gray-600 text-sm">Forgot password?</Link>
+
                     </div>
+                
                 </div>
             </section>
 
