@@ -60,30 +60,36 @@ const Header = () => {
                     Home
                   </Link>
                 </li>
-                <li>
-                  <Link to='/registration'
-                    className="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-red-400 lg:mb-0 mb-2"
-                  >
-                    Registration
-                  </Link>
-                </li>
+              
+{!authCtx.isLoggedIn &&
+  <li>
+  <Link to='/registration'
+    className="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-red-400 lg:mb-0 mb-2"
+  >
+    Registration
+  </Link>
+</li>
+}
 
-                <li>
-                  <Link to='/login'
-                    className="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-red-400 lg:mb-0 mb-2"
-                    onClick={logout}
-                  >
-                    {authCtx.isLoggedIn ? authCtx.userEmail : 'Login'}
-                  </Link>
-                </li>
+{!authCtx.isLoggedIn&&
+
+
+<li>
+<Link to='/login'
+  className="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-red-400 lg:mb-0 mb-2"
+>
+  Login
+</Link>
+</li>
+}
                 
-                <li>
+              {authCtx.isLoggedIn&&  <li>
                   <Link to='/profile'
                     className="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-red-400 lg:mb-0 mb-2"
                   >
                     Profile
                   </Link>
-                </li>
+                </li>}
 
               </ul>
             </nav>

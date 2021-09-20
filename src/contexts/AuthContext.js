@@ -21,12 +21,15 @@ export const AuthContextProvider = (props) => {
     };
 
     function resetPasswordHandler(email){
-       return auth.sendPasswordResetEmail(email);
+        // passing the config object so that after reseting the password we are forwared to this login page...
+        const config = {
+            url:'http://localhost:3000/login'
+        }
+       return auth.sendPasswordResetEmail(email, config);
     };
 
     const loginHandler = (email, password) => {
-        console.log('hoce li doc ovdje ikad');
-        auth.signInWithEmailAndPassword(email, password);
+       return auth.signInWithEmailAndPassword(email, password);
     };
 
     useEffect(() => {

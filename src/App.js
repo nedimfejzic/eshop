@@ -35,7 +35,7 @@ const App = () => {
           <MainLayout>
             <Login />
           </MainLayout>
-        </Route>
+        </Route>``
 
         <Route path="/reset-password">
           <MainLayout>

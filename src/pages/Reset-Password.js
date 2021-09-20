@@ -24,7 +24,7 @@ const inputChangeHandler=()=>{
 
     try{
 
-        await authCtx.resetPassword(enteredIdentifier)
+        await authCtx.resetPassword(enteredIdentifier)   
 
         toast.success('Check your mail for completing the procedure.', {
             position: "top-right",
