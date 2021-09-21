@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { auth } from "../firebase/utils";
+import { auth, handleUserProfile } from "../firebase/utils";
 
 export const AuthContext = React.createContext({
     currentUser: '',
@@ -7,9 +7,8 @@ export const AuthContext = React.createContext({
     userEmail: '',
     login: (email, password) => { },
     logout: () => { },
-    resetPassword : (email) =>{}
+    resetPassword: (email) => { }
 });
-
 
 export const AuthContextProvider = (props) => {
     const [currentUser, setCurrentUser] = useState('');
@@ -20,28 +19,34 @@ export const AuthContextProvider = (props) => {
         auth.signOut();
     };
 
-    function resetPasswordHandler(email){
+    function resetPasswordHandler(email) {
         // passing the config object so that after reseting the password we are forwared to this login page...
         const config = {
-            url:'http://localhost:3000/login'
+            url: 'http://localhost:3000/login'
         }
-       return auth.sendPasswordResetEmail(email, config);
+        return auth.sendPasswordResetEmail(email, config);
     };
 
     const loginHandler = (email, password) => {
-       return auth.signInWithEmailAndPassword(email, password);
+        return auth.signInWithEmailAndPassword(email, password);
     };
+
+    const handleFirebaseUser = async (user) => {
+        const userRef = await handleUserProfile(user);
+        userRef.onSnapshot((snapshot) => {
+            console.log('Firebase Snapshot - ID - ' + snapshot.id);
+        })
+    }
 
     useEffect(() => {
         const unsubscriber = auth.onAuthStateChanged(user => {
 
             if (user) {
                 console.log('authListener-context: PRIJAVA');
-
                 setCurrentUser(user);
                 setCurrentUserIdentifier(user.email);
                 setUserIsLoggedIn(true);
-              
+                handleFirebaseUser(user);
             }
             else {
                 console.log('authListener-context: ODJAVA');
@@ -52,8 +57,6 @@ export const AuthContextProvider = (props) => {
         })
         return unsubscriber;
     }, [])
-
-
 
     const contextValue = {
         user: currentUser,
