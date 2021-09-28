@@ -7,24 +7,23 @@ import Profile from "./pages/Profile";
 import { useContext } from "react";
 import { AuthContext } from "./contexts/AuthContext";
 import ResetPassword from "./pages/Reset-Password";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import AdminDashboard from "./pages/AdminDashboard";
+import LogedUserLayout from "./layouts/LogedUserLayout";
 
 const App = () => {
-
   const authCtx = useContext(AuthContext);
-
 
   return (
     <div className="">
-       <ToastContainer />
+      <ToastContainer />
       <Switch>
         <Route exact path="/">
           <MainLayout>
             <HomePage></HomePage>
           </MainLayout>
         </Route>
-
         <Route path="/registration">
           <MainLayout>
             <Registration />
@@ -35,28 +34,42 @@ const App = () => {
           <MainLayout>
             <Login />
           </MainLayout>
-        </Route>``
+        </Route>
 
         <Route path="/reset-password">
           <MainLayout>
             <ResetPassword />
           </MainLayout>
         </Route>
-
         <Route path="/profile">
           {authCtx.isLoggedIn && (
             <MainLayout>
               <Profile />
             </MainLayout>
           )}
-          {!authCtx.isLoggedIn && <Redirect to='/login'></Redirect> }
+          {!authCtx.isLoggedIn && <Redirect to="/login"></Redirect>}
+        </Route>
+
+        <Route path="/nedim">
+            <LogedUserLayout>
+              <MainLayout>
+              <h1>Nedim je ovo, ako si </h1>
+              </MainLayout>
+            </LogedUserLayout>
         </Route>
 
 
 
 
-
-        
+        <Route path="/admin-dashboard">
+            {authCtx.isAdmin&& <MainLayout>
+            <AdminDashboard />
+          </MainLayout>}
+          {!authCtx.isAdmin&&
+          <MainLayout>
+            <h1>Not enough permissions.</h1>
+          </MainLayout>}
+        </Route>
       </Switch>
     </div>
   );

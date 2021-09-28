@@ -1,25 +1,10 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 import { AuthContext } from "../contexts/AuthContext";
 
 
 const Header = () => {
   const authCtx = useContext(AuthContext);
-  const logout = ()=>{
-
-    authCtx.logout();
-    
-    toast('Loggin out', {
-      position: "top-right",
-      autoClose: 1600,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      });
-  }
   return (
     <header>
       <div className="container mx-auto">

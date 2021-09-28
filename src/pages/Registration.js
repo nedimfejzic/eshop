@@ -1,8 +1,6 @@
 import { useRef, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { toast } from "react-toastify";
 import fire from "../firebase/utils";
-//import { useAuth } from "../contexts/AuthContext";
 
 const Registration = () => {
   const identifierInputRef = useRef();
@@ -10,10 +8,7 @@ const Registration = () => {
   const [identifierError, setIdentifierError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const history = useHistory();
-  const clearInputs = () => {
-    identifierInputRef.current.value = "";
-    passwordInputRef.current.value = "";
-  };
+  
 
  
   const handleSubmit = async (e) => {
@@ -27,8 +22,7 @@ const Registration = () => {
       return setPasswordError('Password cant be "nedim123"');
     }
 
-    fire.
-    auth()
+    fire.auth()
     .createUserWithEmailAndPassword(enteredIdentifier, enteredPass)
     .then(function tacno(){
       console.log('prijavljeno sve ok....');
@@ -43,6 +37,9 @@ const Registration = () => {
             case 'auth/weak-password':
                 setPasswordError(err.message);
                 break;
+            default :
+              setPasswordError('Error. Please try again.');
+
 
         }
     })

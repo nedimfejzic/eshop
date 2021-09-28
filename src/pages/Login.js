@@ -1,13 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useRef } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AuthContext } from "../contexts/AuthContext";
-import fire, { signInWithGoogle } from "../firebase/utils";
+import {signInWithGoogle } from "../firebase/utils";
 import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
-  const [user, setUser] = useState("");
   const [identifierError, setIdentifierError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const identifierInputRef = useRef();
@@ -36,15 +35,13 @@ const Login = () => {
 
     resetErrors();
     try {
-      await authCtx.login(enteredIdentifier, enteredPass);
+    await authCtx.login(enteredIdentifier, enteredPass);
       clearInputs();
-      toast.success("Loged in", {
-        autoClose: 2000,
-        onClose: redirectToHome,
-      });
-
+      toast.success("Loged in", {autoClose: 2000,        onClose: redirectToHome,      });
       identifierInputRef.current.value = "";
+
     } catch (err) {
+      console.log(err);
       switch (err.code) {
         case "auth/invalid-email":
         case "auth/user-disabled":

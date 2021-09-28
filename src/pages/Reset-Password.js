@@ -1,16 +1,13 @@
 import { useContext, useRef, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { Link} from "react-router-dom";
+import { toast} from "react-toastify";
 import { AuthContext } from "../contexts/AuthContext";
 
 const ResetPassword = () => {
   const identifierInputRef = useRef();
   const [identifierError, setIdentifierError] = useState('');
-  const history = useHistory();
   const authCtx = useContext(AuthContext);
-  const clearInputs = () => {
-    identifierInputRef.current.value = "";
-  };
+
 
 const inputChangeHandler=()=>{
     if (identifierError) {
@@ -51,19 +48,6 @@ const inputChangeHandler=()=>{
             progress: undefined,
             });
     }
-
-   {/*
-    fire.
-    auth()
-    .sendPasswordResetEmail(enteredIdentifier)
-    .then(function tacno(){
-      history.push('/');
-    })
-    .catch(err => {
-        setIdentifierError(err.message);
-    })
-*/}
-
   };
 
   return (
